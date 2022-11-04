@@ -1,3 +1,4 @@
 # MeteoSwift
 
-A description of this package.
+Collection of meteorology routines ported to swift.
+Comming soon.

@@ -10,6 +10,10 @@ let package = Package(
         .library(
             name: "MeteoSwift",
             targets: ["MeteoSwift"]),
+        
+            .library(
+                name: "NetCDF",
+                targets: ["NetCDF"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.

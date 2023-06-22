@@ -62,7 +62,6 @@ public final class NetCDF_File {
     public func get_time<T: NetcdfConvertible>(_ key: String = "time", as: T.Type) throws -> [T] {
         return try get(key: key, as: T.self)
     }
-    
 }
 
 public struct NCData<T: NetcdfConvertible> {

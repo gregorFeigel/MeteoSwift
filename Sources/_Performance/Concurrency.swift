@@ -10,7 +10,28 @@ import Foundation
 @available(macOS 10.15.0, *)
 public extension Collection {
     
-    func concurrentMap<T>(_ transform: @escaping (Element) throws -> T?) async rethrows -> [T] {
+    func concurrentMap<T>(_ transform: @escaping (Element) async throws -> T?) async rethrows -> [T] {
+        
+        return try await withThrowingTaskGroup(of: (Int, T?).self) { group in
+            
+            for (i,n) in self.enumerated() {
+                group.addTask {
+                     return try await (i, transform(n))
+                }
+                
+            }
+            var result = [T?](repeatElement(nil, count: self.count))
+            for try await n in group {
+                result[n.0] = n.1
+            }
+            
+            return result.compactMap({ $0 })
+        }
+        
+         
+    }
+    
+    func _concurrentMap<T>(_ transform: @escaping (Element) throws -> T?) async rethrows -> [T] {
         return try await withThrowingTaskGroup(of: (Int, T?).self, returning: [T].self, body: { group in
             
             for (i,n) in self.enumerated() {

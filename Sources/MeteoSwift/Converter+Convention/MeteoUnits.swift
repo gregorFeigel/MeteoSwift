@@ -12,23 +12,23 @@
 
 import Foundation
 
-struct TemperaturUnit: MeteoUnit {
+public struct TemperaturUnit: MeteoUnit {
     
-    typealias unit_key = UnitKey
+    public typealias unit_key = UnitKey
     
-    let unit: unit_key
+    public let unit: unit_key
     
-    static let degree_celcius:   TemperaturUnit  = .init(unit: .degree_celcius)
-    static let degree_farenheit: TemperaturUnit  = .init(unit: .degree_farenheit)
-    static let kelvin:           TemperaturUnit  = .init(unit: .kelvin)
+    public static let degree_celcius:   TemperaturUnit  = .init(unit: .degree_celcius)
+    public static let degree_farenheit: TemperaturUnit  = .init(unit: .degree_farenheit)
+    public static let kelvin:           TemperaturUnit  = .init(unit: .kelvin)
     
-    enum UnitKey {
+    public enum UnitKey {
         case degree_celcius
         case degree_farenheit
         case kelvin
     }
     
-    var symbol: String {
+    public var symbol: String {
         switch unit {
             case .degree_celcius:   return "°C"
             case .kelvin:           return "K"
@@ -36,7 +36,7 @@ struct TemperaturUnit: MeteoUnit {
         }
     }
     
-    func makeConverter<T: FloatingNumber>(unit key: unit_key) -> ConverterFunction<T> {
+    public func makeConverter<T: FloatingNumber>(unit key: unit_key) -> ConverterFunction<T> {
         switch (unit, key) {
             case (.degree_celcius, .kelvin):
                 return { (_ input: T) in
@@ -83,24 +83,24 @@ struct TemperaturUnit: MeteoUnit {
     
 }
 
-struct PressureUnit: MeteoUnit {
-    typealias unit_key = UnitKey
+public struct PressureUnit: MeteoUnit {
+    public typealias unit_key = UnitKey
     
-    let unit: unit_key
+    public let unit: unit_key
     
-    static let pascal:           PressureUnit = .init(unit: .pascal)
-    static let kilopascal:       PressureUnit = .init(unit: .kilopascal)
-    static let hectopascal:      PressureUnit = .init(unit: .hectopascal)
-    static let megapascal:       PressureUnit = .init(unit: .megapascal)
-    static let millibar:         PressureUnit = .init(unit: .millibar)
-    static let bar:              PressureUnit = .init(unit: .bar)
-    static let kilo_bar:         PressureUnit = .init(unit: .kilo_bar)
-    static let psi:              PressureUnit = .init(unit: .psi)
-    static let inch_of_mercury:  PressureUnit = .init(unit: .inch_of_mercury)
-    static let atm:              PressureUnit = .init(unit: .atm)
-    static let torr:             PressureUnit = .init(unit: .torr)
+    public static let pascal:           PressureUnit = .init(unit: .pascal)
+    public static let kilopascal:       PressureUnit = .init(unit: .kilopascal)
+    public static let hectopascal:      PressureUnit = .init(unit: .hectopascal)
+    public static let megapascal:       PressureUnit = .init(unit: .megapascal)
+    public static let millibar:         PressureUnit = .init(unit: .millibar)
+    public static let bar:              PressureUnit = .init(unit: .bar)
+    public static let kilo_bar:         PressureUnit = .init(unit: .kilo_bar)
+    public static let psi:              PressureUnit = .init(unit: .psi)
+    public static let inch_of_mercury:  PressureUnit = .init(unit: .inch_of_mercury)
+    public static let atm:              PressureUnit = .init(unit: .atm)
+    public static let torr:             PressureUnit = .init(unit: .torr)
     
-    enum UnitKey {
+    public enum UnitKey {
         case pascal
         case kilopascal
         case hectopascal
@@ -114,7 +114,7 @@ struct PressureUnit: MeteoUnit {
         case torr
     }
     
-    var symbol: String {
+    public var symbol: String {
         switch unit {
             case .pascal:           return "pa"
             case .kilopascal:       return "kpa"
@@ -130,7 +130,7 @@ struct PressureUnit: MeteoUnit {
         }
     }
     
-    func makeConverter<T: FloatingNumber>(unit key: unit_key) -> ConverterFunction<T> {
+    public func makeConverter<T: FloatingNumber>(unit key: unit_key) -> ConverterFunction<T> {
         switch (key, unit) {
             case (.millibar, .pascal):
                 return { (_ input: T) in
@@ -622,22 +622,22 @@ struct PressureUnit: MeteoUnit {
     
 }
 
-struct EnergyUnit: MeteoUnit {
-    typealias unit_key = UnitKey
+public struct EnergyUnit: MeteoUnit {
+    public typealias unit_key = UnitKey
     
-    let unit: unit_key
+    public let unit: unit_key
     
-    static let watt_per_square_metre:      EnergyUnit = .init(unit: .watt_per_square_metre)
-    static let kilo_watt_per_square_metre: EnergyUnit = .init(unit: .kilo_watt_per_square_metre)
-    static let mega_watt_per_square_metre: EnergyUnit = .init(unit: .mega_watt_per_square_metre)
+    public static let watt_per_square_metre:      EnergyUnit = .init(unit: .watt_per_square_metre)
+    public static let kilo_watt_per_square_metre: EnergyUnit = .init(unit: .kilo_watt_per_square_metre)
+    public  static let mega_watt_per_square_metre: EnergyUnit = .init(unit: .mega_watt_per_square_metre)
     
-    enum UnitKey {
+    public enum UnitKey {
         case watt_per_square_metre
         case kilo_watt_per_square_metre
         case mega_watt_per_square_metre
     }
     
-    var symbol: String {
+    public var symbol: String {
         switch unit {
             case .watt_per_square_metre:      return "W/m2"
             case .kilo_watt_per_square_metre: return "kW/m2"
@@ -645,7 +645,7 @@ struct EnergyUnit: MeteoUnit {
         }
     }
     
-    func makeConverter<T: FloatingNumber>(unit key: unit_key) -> ConverterFunction<T> {
+    public func makeConverter<T: FloatingNumber>(unit key: unit_key) -> ConverterFunction<T> {
         switch (key, unit) {
             case (.watt_per_square_metre, .kilo_watt_per_square_metre):
                 return { (_ input: T) in
@@ -690,27 +690,27 @@ struct EnergyUnit: MeteoUnit {
     }
 }
 
-struct VolumeUnit: MeteoUnit {
-    typealias unit_key = UnitKey
+public struct VolumeUnit: MeteoUnit {
+    public typealias unit_key = UnitKey
     
-    let unit: unit_key
+    public let unit: unit_key
     
-    static var liter_per_square_meter:        VolumeUnit = .init(unit: .liter_per_square_meter)
-    static var liter_per_millimeter_per_hour: VolumeUnit = .init(unit: .millimeter_per_hour)
+    public static var liter_per_square_meter:        VolumeUnit = .init(unit: .liter_per_square_meter)
+    public static var liter_per_millimeter_per_hour: VolumeUnit = .init(unit: .millimeter_per_hour)
     
-    enum UnitKey {
+    public enum UnitKey {
         case liter_per_square_meter
         case millimeter_per_hour
     }
     
-    var symbol: String {
+    public var symbol: String {
         switch unit {
             case .millimeter_per_hour:    return "mm/h"
             case .liter_per_square_meter: return "l/h"
         }
     }
     
-    func makeConverter<T: FloatingNumber>(unit key: unit_key) -> ConverterFunction<T> {
+    public func makeConverter<T: FloatingNumber>(unit key: unit_key) -> ConverterFunction<T> {
         switch (key, unit) {
             case (.liter_per_square_meter, .millimeter_per_hour):
                 return { (_ input: T) in
@@ -732,18 +732,18 @@ struct VolumeUnit: MeteoUnit {
     }
 }
 
-struct SpeedUnit: MeteoUnit {
-    typealias unit_key = UnitKey
+public struct SpeedUnit: MeteoUnit {
+    public typealias unit_key = UnitKey
     
-    let unit: unit_key
+    public let unit: unit_key
     
-    static var meter_per_second:     SpeedUnit = .init(unit: .meter_per_second)
-    static var meter_per_hour:       SpeedUnit = .init(unit: .meter_per_hour)
-    static var kilometer_per_hour:   SpeedUnit = .init(unit: .kilometer_per_hour)
-    static var miles_per_hour:       SpeedUnit = .init(unit: .miles_per_hour)
-    static var knot:                 SpeedUnit = .init(unit: .knot)
+    public static var meter_per_second:     SpeedUnit = .init(unit: .meter_per_second)
+    public static var meter_per_hour:       SpeedUnit = .init(unit: .meter_per_hour)
+    public static var kilometer_per_hour:   SpeedUnit = .init(unit: .kilometer_per_hour)
+    public static var miles_per_hour:       SpeedUnit = .init(unit: .miles_per_hour)
+    public static var knot:                 SpeedUnit = .init(unit: .knot)
     
-    enum UnitKey {
+    public enum UnitKey {
         case meter_per_second
         case meter_per_hour
         case miles_per_hour
@@ -751,7 +751,7 @@ struct SpeedUnit: MeteoUnit {
         case kilometer_per_hour
     }
     
-    var symbol: String {
+    public var symbol: String {
         switch unit {
             case .meter_per_second:    return "m/s"
             case .meter_per_hour:      return "m/h"
@@ -761,7 +761,7 @@ struct SpeedUnit: MeteoUnit {
         }
     }
     
-    func makeConverter<T: FloatingNumber>(unit key: unit_key) -> ConverterFunction<T> {
+    public func makeConverter<T: FloatingNumber>(unit key: unit_key) -> ConverterFunction<T> {
         switch (key, unit) {
                 // meter per second
             case(.meter_per_second, .meter_per_hour):

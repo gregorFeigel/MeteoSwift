@@ -49,11 +49,7 @@ extension Collection {
             
             return result.compactMap({ $0 })
         }
-        
-         
     }
-    
-    
 }
 
 
@@ -73,7 +69,7 @@ if #available(macOS 10.15.0, *) {
         })
     //
     
-    func endless() async {
+    @Sendable func endless() async {
         while true {  }
     }
     

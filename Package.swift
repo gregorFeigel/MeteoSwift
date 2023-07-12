@@ -42,7 +42,7 @@ let package = Package(
         
             .executableTarget(
                 name: "NetCDFTestExec",
-                dependencies: ["NetCDF", "_Metrics"]
+                dependencies: ["NetCDF", "_Metrics", "MeteoSwift"]
             ),
         
             .executableTarget(

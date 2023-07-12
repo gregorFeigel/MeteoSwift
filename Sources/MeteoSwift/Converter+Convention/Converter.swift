@@ -53,7 +53,7 @@ public final class MeterologicalConverter {
     
 }
 
-extension MeterologicalConverter {
+public extension MeterologicalConverter {
     
     func convert<T: FloatingNumber>(_ input: [String: [T]]) throws -> [String: [T]] {
         guard let base = base_convention   else { throw ConverterError.missingSourceConvention }
@@ -134,7 +134,7 @@ extension MeterologicalConverter {
 
 // MARK: Convserion routines
 // simple array conversion
-extension MeterologicalConverter {
+public extension MeterologicalConverter {
     
     // convert single array
     func convert<T: FloatingNumber, U: MeteoUnit>(_ input: [T], from src_unit: U, to dest_unit: U, error: T = .nan) throws -> [T] {
@@ -143,7 +143,7 @@ extension MeterologicalConverter {
     }    
 }
 
-extension MeterologicalConverter {
+public extension MeterologicalConverter {
     
     func make_converter<T: FloatingNumber, P: MeteoUnit>(_ from: P, to: P) -> ConverterFunction<T> {
         let converter: ConverterFunction<T> = from.makeConverter(unit: to.unit)

@@ -48,6 +48,7 @@ public struct NetCDFDuration: Sendable {
         return .init(Int64(duration * 60))
     }
     
+    
     public static func hours(_ duration: Int64) -> NetCDFDuration {
         return .init(Int64(duration * 3600))
     }
@@ -55,7 +56,19 @@ public struct NetCDFDuration: Sendable {
     public static func years(_ duration: Int64) -> NetCDFDuration {
         return .init(Int64(duration * 31_556_952))
     }
-
+    
+    public static func minutly() -> NetCDFDuration {
+        return .init(1)
+    }
+    
+    public static func hourly() -> NetCDFDuration {
+        return .init(60)
+    }
+    
+    public static func daily() -> NetCDFDuration {
+        return .init(86400)
+    }
+    
 }
 
 

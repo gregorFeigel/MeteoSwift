@@ -64,13 +64,13 @@ func withTmpFile(_ f: (URL) throws -> ()) rethrows {
 
 
 try withTmpFile { file in
-        
+    
     let nc = try NetCDFDocument(url: file, fileMode: .write)
     
     try nc.setDimension(name: "longitude", legth: 1)
     try nc.setDimension(name: "latitude",  legth: 1)
     try nc.setDimension(name: "time",      legth: 2)
-
+    
     // write values to some dimensions
     nc["longitude", to: "longitude"] = [17.0]
     nc["latitude",  to: "latitude"]  = [47.0]
@@ -83,4 +83,38 @@ try withTmpFile { file in
     let values: [Double] = try nc["air_temp"]
     print("air_temp", values)
     
+}
+
+print()
+
+try withTmpFile { file in
+    
+    let nc = try NetCDFDocument(url: file, fileMode: .write)
+    
+    try nc.setDimension(name: "longitude", legth: 1)
+    try nc.setDimension(name: "latitude",  legth: 1)
+    try nc.setDimension(name: "time",      legth: 4)
+    
+    // write values to some dimensions
+    nc["longitude", to: "longitude"] = [17.0]
+    nc["latitude",  to: "latitude"]  = [47.0]
+    nc["time",      to: "time"]      = try ["01.05.2023 15:00".date(), "01.05.2023 15:10".date(), "01.05.2023 15:20".date(), "01.05.2023 15:30".date()]
+    
+    // write values to all dimensions
+    let ta: [Float] = [0.0, 5.0, 10.0, 15.0]
+    nc["air_temp"]  = ta
+    
+    // get timeline boundries
+    let timeSpan = try nc.timeSpan
+    print("From:", Date(timeIntervalSince1970: timeSpan.start), "to:", Date(timeIntervalSince1970: timeSpan.end))
+    
+    // read value from variable
+    let values: [Float] = try nc["air_temp"]
+    print("air_temp", values)
+    
+    let afternoon = try nc.read(varibale: "air_temp",
+                             from: "01.05.2023 14:30".date(),
+                             to:   "01.05.2023 16:00".date(),
+                             stepSize: .minutes(10))
+    print(afternoon)
 }

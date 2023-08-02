@@ -202,7 +202,7 @@ public final class NetCDFDocument {
 
 public extension String {
     
-    func date(_ format: String = "dd-MM-yyyy hh:mm", timeZone: TimeZone = TimeZone(abbreviation: "UTC")!) throws -> Date {
+    func date(_ format: String = "dd-MM-yyyy HH:mm", timeZone: TimeZone = TimeZone(abbreviation: "UTC")!) throws -> Date {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = format
         dateFormatter.timeZone = timeZone
@@ -210,6 +210,18 @@ public extension String {
             throw "invalid Date Format"
         }
         return date
+    }
+    
+    func date(_ format: String = "dd-MM-yyyy HH:mm", timeZone: TimeZone = TimeZone(abbreviation: "UTC")!) throws -> Double {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        dateFormatter.timeZone = timeZone
+        
+        guard let date = dateFormatter.date(from: self) else {
+            throw "invalid Date Format"
+        }
+        
+        return date.timeIntervalSince1970
     }
 }
 

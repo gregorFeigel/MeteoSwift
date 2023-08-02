@@ -9,7 +9,8 @@ import Foundation
 import SwiftNetCDF
 import _Performance
 
-extension String: Error {}
+fileprivate protocol AnyInternalError: Error {}
+extension String: AnyInternalError {}
 
 public final class NetCDF_File {
     

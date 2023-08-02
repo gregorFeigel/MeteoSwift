@@ -71,13 +71,15 @@ try withTmpFile { file in
     try nc.setDimension(name: "latitude",  legth: 1)
     try nc.setDimension(name: "time",      legth: 2)
 
+    // write values to some dimensions
     nc["longitude", to: "longitude"] = [17.0]
     nc["latitude",  to: "latitude"]  = [47.0]
     nc["time",      to: "time"]      = [0.0,  2.0]
     
+    // write values to all dimensions
     nc["air_temp"]  = [0.0,  2.0]
     
-    
+    // read value from variable
     let values: [Double] = try nc["air_temp"]
     print("air_temp", values)
     

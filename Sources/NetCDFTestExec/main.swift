@@ -62,6 +62,13 @@ func withTmpFile(_ f: (URL) throws -> ()) rethrows {
     try f(tmpFile)
 }
 
+func withTmpFolder(_ f: (URL) throws -> ()) throws {
+    let tmpFile: URL = FileManager.default.temporaryDirectory.appendingPathComponent("com.test-" + UUID().uuidString)
+    try FileManager.default.createDirectory(at: tmpFile, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(atPath: tmpFile.path) }
+    try f(tmpFile)
+}
+
 
 try withTmpFile { file in
     
@@ -112,9 +119,29 @@ try withTmpFile { file in
     let values: [Float] = try nc["air_temp"]
     print("air_temp", values)
     
-    let afternoon = try nc.read(varibale: "air_temp",
-                             from: "01.05.2023 14:30".date(),
-                             to:   "01.05.2023 16:00".date(),
-                             stepSize: .minutes(10))
+    let afternoon: [Float] = try nc.read(variable: "air_temp",
+                                         from: "01.05.2023 15:10".date(),
+                                         to:   "01.05.2023 15:20".date())
     print(afternoon)
+    
+    
+    let GridedAfternoon = try nc.read(variable: "air_temp",
+                                      from: "01.05.2023 14:30".date(),
+                                      to:   "01.05.2023 16:00".date(),
+                                      stepSize: .minutes(10))
+    print(GridedAfternoon)
+}
+
+// NetCDF Group - Folder with multiple NetCDF files
+try withTmpFolder { folder in
+    
+    let ncGroup = NetCDFGroup(folder: folder)
+ 
+    let air_temp: [Float]  = try ncGroup["airTemp"]
+    
+    let afternoon: [Float] = try ncGroup.read(variable: "air_temp",
+                                              from: .distantPast,
+                                              to: .distantFuture)
+    
+    _ = air_temp; _ = afternoon
 }

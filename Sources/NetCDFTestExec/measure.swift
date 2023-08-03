@@ -52,8 +52,8 @@ func test() throws {
         let time: [Double] = try nc.time()
         let x = try nc.time
         
-        let ta_may: [Double] = try nc.read(varibale: "air_temp", from: .now, to: .distantFuture)
-        let ta_may_hourly: [Float] = try nc.read(varibale: "air_temp", from: .now, to: .distantFuture, stepSize: .seconds(50))
+        let ta_may: [Double] = try nc.read(variable: "air_temp", from: .now, to: .distantFuture)
+        let ta_may_hourly: [Float] = try nc.read(variable: "air_temp", from: .now, to: .distantFuture, stepSize: .seconds(50))
         
         let ta_july: [Double] = try nc.timeAxis(from: "04.2023".date(),
                                                 to:   "05.2023".date(),

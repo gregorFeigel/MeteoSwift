@@ -9,10 +9,10 @@ import Foundation
 import SwiftNetCDF
 import _Performance
 
-fileprivate protocol AnyInternalError: Error {}
-extension String: AnyInternalError {}
+fileprivate protocol AnyInternalError: Error { }
+extension String: AnyInternalError { }
 
-public enum FileMode {
+public enum FileMode: Sendable {
     case read
     case write
     case forceWrite
@@ -152,11 +152,22 @@ public final class NetCDFDocument {
         }
     }
     
-    @Sendable public func read<T: NetcdfConvertible>(varibale key: String, from: Date, to: Date) throws -> [T] {
-        return []
+    @Sendable public func read<T: NetcdfConvertible>(variable key: String, from: Date, to: Date) throws -> [T] {
+        var container: [T] = []
+        let variable: [T]  = try self[key]
+        let time: [Double] = try time
+
+        let endDate   = to.timeIntervalSince1970
+        let beginDate = from.timeIntervalSince1970
+        
+        for (i,n) in time.enumerated() where n >= beginDate && n <= endDate {
+            container.append(variable[i])
+        }
+
+        return container
     }
     
-    @Sendable public func read(varibale key: String, from: Date, to: Date, stepSize: NetCDFDuration) throws -> [Float] {
+    @Sendable public func read(variable key: String, from: Date, to: Date, stepSize: NetCDFDuration) throws -> [Float] {
         let griddedvalues = try regrid(timestamp: time,
                                        values: self[key],
                                        from: from,
@@ -200,9 +211,29 @@ public final class NetCDFDocument {
     
 }
 
+public final class NetCDFGroup {
+    
+    public init(folder: URL) {
+        self.folder = folder
+    }
+    
+    let folder: URL
+    
+    public subscript<T: NetcdfConvertible>(_ key: String) -> [T] {
+        get throws {
+            throw ""
+        }
+    }
+    
+    @Sendable public func read<T: NetcdfConvertible>(variable key: String, from: Date, to: Date) throws -> [T] {
+        return []
+    }
+    
+}
+
 public extension String {
     
-    func date(_ format: String = "dd-MM-yyyy HH:mm", timeZone: TimeZone = TimeZone(abbreviation: "UTC")!) throws -> Date {
+    @Sendable func date(_ format: String = "dd-MM-yyyy HH:mm", timeZone: TimeZone = TimeZone(abbreviation: "UTC")!) throws -> Date {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = format
         dateFormatter.timeZone = timeZone
@@ -212,7 +243,7 @@ public extension String {
         return date
     }
     
-    func date(_ format: String = "dd-MM-yyyy HH:mm", timeZone: TimeZone = TimeZone(abbreviation: "UTC")!) throws -> Double {
+    @Sendable func date(_ format: String = "dd-MM-yyyy HH:mm", timeZone: TimeZone = TimeZone(abbreviation: "UTC")!) throws -> Double {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = format
         dateFormatter.timeZone = timeZone

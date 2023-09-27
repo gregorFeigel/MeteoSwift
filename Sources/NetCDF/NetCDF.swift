@@ -34,9 +34,7 @@ public final class NetCDFDocument {
             else { throw "unable to open nc file." }
             self.file = nc_file
         }
-        else {
-            self.file = try NetCDF.create(path: url.path, overwriteExisting: fileMode == .forceWrite ? true : false)
-        }
+        else { self.file = try NetCDF.create(path: url.path, overwriteExisting: fileMode == .forceWrite ? true : false) }
     }
     
     let url: URL
@@ -44,6 +42,16 @@ public final class NetCDFDocument {
     let fileMode: FileMode
     
     public var timeKey: String = "time"
+    public var collapse: collapse?
+    
+    func f_collapse(_ n: [Float]?) -> Float {
+        if let x = n {
+            let c = x.filter({ $0 != -9999.0 })
+            if c.isEmpty { return -9999  }
+            return c.reduce(0, +) / Float(c.count)
+        }
+        else { return -9999 }
+    }
     
     public subscript<T: NetcdfConvertible>(_ key: String) -> [T] {
         get throws {
@@ -172,7 +180,8 @@ public final class NetCDFDocument {
                                        values: self[key],
                                        from: from,
                                        to: to,
-                                       intervalSizeInSeconds: Double(stepSize.seconds))
+                                       intervalSizeInSeconds: Double(stepSize.seconds),
+                                       collapse: collapse == nil ? f_collapse(_:) : collapse!)
         
         return griddedvalues.griddedData
     }

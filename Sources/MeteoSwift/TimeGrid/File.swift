@@ -6,15 +6,17 @@
 //
 
 import Foundation
+import NetCDF
 
-extension String: Error {}
 
 @discardableResult
-@Sendable public func gridMeasurements(timestamp: [Double], values: [Float], from: Date, to: Date, intervalSizeInSeconds: Double) -> (griddedTime: [Double], griddedData: [Float]) {
-    // Find the minimum and maximum timestamps in the original time array
+@Sendable public func gridMeasurements(timestamp: [Double], values: [Float], from: Date, to: Date, intervalSizeInSeconds: Double) throws -> (griddedTime: [Double], griddedData: [Float])  {
+ 
+    if values.count > timestamp.count { throw "Invalid array dimensions. There must be no more data than time stamps." }
     
     // Calculate the number of intervals needed to cover the entire range of time data
     let numIntervals = Int((to.timeIntervalSince1970 - from.timeIntervalSince1970) / intervalSizeInSeconds) //+ 1
+    
     
     // Create an array to store the gridded time points and initialize it with the appropriate number of elements
     var griddedTime = [Double](repeating: 0, count: numIntervals)
@@ -40,7 +42,7 @@ extension String: Error {}
     let return_value: [Float] = griddedData.map { n in
         if let x = n {
             let c = x.filter({ $0 != -9999.0 })
-            if c.isEmpty { return -9999  }
+            if c.isEmpty { return -9999  }
             return c.reduce(0, +)
         }
         else { return -9999 }
@@ -50,3 +52,5 @@ extension String: Error {}
 }
 
 
+
+ 

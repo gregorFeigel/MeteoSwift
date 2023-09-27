@@ -10,6 +10,8 @@ let package = Package(
         .library(name: "NetCDF",       targets: ["NetCDF", "_Performance"]),
         .library(name: "_Metrics",     targets: ["_Metrics"]),
         .library(name: "_Performance", targets: ["_Performance", "_Metrics"]),
+        .library(name: "Visualisation", targets: ["_Performance", "Visualisation"]),
+
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -17,14 +19,16 @@ let package = Package(
     ],
     targets: [
         // Libaries
-        .target(name: "MeteoSwift",   dependencies: []),
-        .target(name: "_Metrics",     dependencies: []),
+        .target(name: "MeteoSwift",    dependencies: ["NetCDF"]),
+        .target(name: "_Metrics",      dependencies: []),
+        .target(name: "Visualisation", dependencies: ["_Performance"]),
+
         .target(name: "NetCDF",       dependencies: ["SwiftNetCDF", "_Performance"],
-                cSettings: [.unsafeFlags(["-warn-concurrency", "-Xfrontend"])]),
+                cSettings: [.unsafeFlags([])]), //-warn-concurrency", "-Xfrontend
 
         .target(name: "_Performance",
                 dependencies: [],
-                cSettings: [.unsafeFlags(["-warn-concurrency", "-Xfrontend"])]),
+                cSettings: [.unsafeFlags([])]), //-warn-concurrency", "-Xfrontend
         
     
         // Executables

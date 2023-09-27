@@ -7,9 +7,10 @@
 
 import Foundation
 
+public typealias collapse = ([Float]?) -> Float
 
 @discardableResult
-@Sendable public func regrid(timestamp: [Double], values: [Float], from: Date, to: Date, intervalSizeInSeconds: Double) -> (griddedTime: [Double], griddedData: [Float]) {
+@Sendable public func regrid(timestamp: [Double], values: [Float], from: Date, to: Date, intervalSizeInSeconds: Double, collapse: collapse) -> (griddedTime: [Double], griddedData: [Float]) {
     // Calculate the number of intervals needed to cover the entire range of time data
     let numIntervals = Int((to.timeIntervalSince1970 - from.timeIntervalSince1970) / intervalSizeInSeconds) //+ 1
     
@@ -35,13 +36,11 @@ import Foundation
     }
     
     let return_value: [Float] = griddedData.map { n in
-        if let x = n {
-            let c = x.filter({ $0 != -9999.0 })
-            if c.isEmpty { return -9999  }
-            return c.reduce(0, +)
-        }
-        else { return -9999 }
+        return collapse(n)
     }
     
     return (griddedTime, return_value)
 }
+
+
+

@@ -27,13 +27,31 @@ public typealias collapse = ([Float]?) -> Float
     
     var griddedData = [[Float]?](repeating: nil, count: numIntervals)
     
+//    for i in 0..<timestamp.count {
+//        let index = Int((timestamp[i] - from_date) / intervalSizeInSeconds)
+//        if griddedData[index] == nil {
+//            griddedData[index] = [values[i]]
+//        }
+//        else { griddedData[index]! += [values[i]] }
+//    }
+//
+    
+    
+    
     for i in 0..<timestamp.count {
         let index = Int((timestamp[i] - from_date) / intervalSizeInSeconds)
-        if griddedData[index] == nil {
-            griddedData[index] = [values[i]]
+        
+        // Check if index is within valid range
+        if index >= 0 && index < numIntervals {
+            if griddedData[index] == nil {
+                griddedData[index] = [values[i]]
+            }
+            else { griddedData[index]! += [values[i]] }
         }
-        else { griddedData[index]! += [values[i]] }
+        else { /* Handle issue here */}
     }
+    
+    
     
     let return_value: [Float] = griddedData.map { n in
         return collapse(n)

@@ -86,7 +86,14 @@ if #available(macOS 10.15.0, *) {
 //        }
 //    }
     
+    let x: [String] = []
     
+    let p: [String] = await x.enumerated().concurrentMap { (i, n) in
+        n
+    }
     
     
 }
+
+
+

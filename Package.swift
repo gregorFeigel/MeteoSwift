@@ -6,11 +6,14 @@ import PackageDescription
 let package = Package(
     name: "MeteoSwift",
     products: [
-        .library(name: "MeteoSwift" ,  targets: ["MeteoSwift", "_Performance", "_Metrics"]),
-        .library(name: "NetCDF",       targets: ["NetCDF", "_Performance"]),
-        .library(name: "_Metrics",     targets: ["_Metrics"]),
-        .library(name: "_Performance", targets: ["_Performance", "_Metrics"]),
-        .library(name: "Visualisation", targets: ["_Performance", "Visualisation"]),
+        .library(name: "MeteoSwift" ,   targets: ["MeteoSwift", "_Performance", "_Metrics", "Convention", "VirtualDataSource"]),
+        .library(name: "Convention",    targets: ["Convention"]),
+        .library(name: "NetCDF",        targets: ["NetCDF"]),
+        .library(name: "_Metrics",      targets: ["_Metrics"]),
+        .library(name: "_Performance",  targets: ["_Performance"]),
+        .library(name: "Visualisation", targets: ["Visualisation"]),
+        .library(name: "VirtualDataSource", targets: ["VirtualDataSource", "NetCDF"]),
+        
 
     ],
     dependencies: [
@@ -19,16 +22,14 @@ let package = Package(
     ],
     targets: [
         // Libaries
-        .target(name: "MeteoSwift",    dependencies: ["NetCDF"]),
+        .target(name: "Convention",    dependencies: ["_Performance"]),
+        .target(name: "MeteoSwift",    dependencies: ["NetCDF", "Convention"]),
         .target(name: "_Metrics",      dependencies: []),
-        .target(name: "Visualisation", dependencies: ["_Performance"]),
-
-        .target(name: "NetCDF",       dependencies: ["SwiftNetCDF", "_Performance"],
-                cSettings: [.unsafeFlags([])]), //-warn-concurrency", "-Xfrontend
-
-        .target(name: "_Performance",
-                dependencies: [],
-                cSettings: [.unsafeFlags([])]), //-warn-concurrency", "-Xfrontend
+        .target(name: "Visualisation", dependencies: ["_Performance", "_Metrics"]),
+        .target(name: "VirtualDataSource", dependencies: ["NetCDF", "_Performance", "Convention"]),
+        
+        .target(name: "NetCDF",       dependencies: ["SwiftNetCDF", "_Performance"], cSettings: [.unsafeFlags([])]), //-warn-concurrency", "-Xfrontend
+        .target(name: "_Performance", dependencies: [], cSettings: [.unsafeFlags([])]), //-warn-concurrency", "-Xfrontend
         
     
         // Executables
@@ -37,6 +38,8 @@ let package = Package(
         .executableTarget(name: "DataAnalysis",         dependencies: ["_Metrics", "_Performance", "NetCDF"]),
         
         // Test Targets
-        .testTarget(name: "MeteoSwiftTests", dependencies: ["MeteoSwift"]),
+        .testTarget(name: "MeteoSwiftTests", dependencies: ["MeteoSwift", "Convention"]),
+        .testTarget(name: "VirtualDataSourceTests", dependencies: ["VirtualDataSource"]),
+
     ]
 )

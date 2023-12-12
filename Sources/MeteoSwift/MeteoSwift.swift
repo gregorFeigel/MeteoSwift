@@ -10,9 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-
 public struct MeteoSwift {
     
     public private(set) var text = "Coming soon!"
     
 }
+	

@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
+import _Performance
 
 public protocol FloatingNumber: ExpressibleByFloatLiteral, FloatingPoint, BinaryFloatingPoint {}
 extension Double: FloatingNumber {}

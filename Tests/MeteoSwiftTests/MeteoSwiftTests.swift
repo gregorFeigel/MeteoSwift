@@ -1,5 +1,6 @@
 import XCTest
 @testable import MeteoSwift
+@testable import Convention
 
 final class MeteoSwift_Coverter_Test: XCTestCase {
 

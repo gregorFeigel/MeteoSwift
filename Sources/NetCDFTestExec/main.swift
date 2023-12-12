@@ -39,7 +39,7 @@ func grid() {
     var values: [Float] = Array.init(repeating: -9999, count: numIntervals)
     values = values.map { _ in .random(in: 0..<55) }
     
-    let x = gridMeasurements(timestamp: griddedTime,
+    let x = try! gridMeasurements(timestamp: griddedTime,
                              values: values,
                              from: "05.01.2023 00:00".toDate(format: "dd-MM-yyyy hh:mm")!, // "09.07.2022".toDate(format: "dd-MM-yyyy")!
                              to: "05.01.2024 03:00".toDate(format: "dd-MM-yyyy hh:mm")!,

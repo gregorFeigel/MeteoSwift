@@ -10,7 +10,8 @@ import Foundation
 import XCTest
 @testable import VirtualDataSource
 @testable import NetCDF
- 
+@testable import Convention
+
 final class VirtualDataSource_Test: XCTestCase {
     
     // create 4 month of data and spread it over 4 nc files
@@ -49,14 +50,18 @@ final class VirtualDataSource_Test: XCTestCase {
         // create 4 month of data and spread it over 4 nc files
         let files: [URL] = try mock_nc_files()
         defer { try? removeFiles(files) }
+                
+        let data_source = VirtualDataSource(convention: CFConvention.self)
+        data_source.excpect(var: "air_temperature", unit: TemperaturUnit.degree_celcius, alias: "AirTemp")
+        data_source.excpect(var: "pet", unit: TemperaturUnit.degree_celcius)
         
-        let data_source = VirtualDataSource()
         try data_source.register(id: "FRHERD", source: try NetCDFDocument(url: .documentsDirectory + "WSN_T1_YEAR/NetCDF/Stations/FRHERD_year.nc"))
         try data_source.register(id: "FRGUNT", source: try NetCDFDocument(url: .documentsDirectory + "WSN_T1_YEAR/NetCDF/Stations/FRGUNT_year.nc"))
         try data_source.register(id: "FRTEST", source: try files.map({ try NetCDFDocument(url: $0) }))
         
         // read all data
-        let ta: [Double] = try data_source["FRTEST"]["AirTemp"]
+        let ta: [Double] = try data_source["FRTEST"][CFConvention.air_temperature.rawValue]
+        
         XCTAssertTrue(ta.count == 172740)
     }
 }
